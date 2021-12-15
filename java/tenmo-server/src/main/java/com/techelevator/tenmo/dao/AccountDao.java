@@ -3,9 +3,11 @@ package com.techelevator.tenmo.dao;
 import com.techelevator.tenmo.model.Account;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface AccountDao {
     Account findAccountById(int accountId);
     Account findUserById(int userId);
-    String findBalance(String userName);
+    Account findBalance(String userName);
+    List<Account> getAllAccountsById();
 }

@@ -5,7 +5,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class JdbcAccountDao implements AccountDao{
 
@@ -15,21 +17,61 @@ public class JdbcAccountDao implements AccountDao{
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
     @Override
+    public List<Account> getAllAccountsById(){
+        List<Account> accountList = new ArrayList<>();
+        String sql = "SELECT account_id FROM accounts";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while(results.next()){
+            Account account = mapRowToAccount(results);
+            accountList.add(account);
+        }
+        return accountList;
+    }
+
+    @Override
+    /**
+     * RETURNED NULL FOR NOW
+     */
     public Account findAccountById(int accountId) {
-        String sql = "SELECT account_id FROM accounts  WHERE account_id = ? ";
-        return jdbcTemplate.queryForObject(sql, Account.class, accountId);
+        String sql = "SELECT account_id FROM accounts JOIN users ON users.user_id = accounts.user_id WHERE account_id = ? ";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
+        Account account = null;
+        if(result.next()){
+            account = mapRowToAccount(result);
+        }
+        return null;
     }
 
     @Override
     public Account findUserById(int userId) {
-    String sql = "SELECT user_id FROM accounts WHERE user_id = ?";
-        return jdbcTemplate.queryForObject(sql, Account.class, userId);
+        String sql = "SELECT * FROM accounts WHERE user_id = ?";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, userId);
+        Account account = null;
+        if(result.next()){
+            account = mapRowToAccount(result);
+        }
+        return account;
     }
 
     @Override
-    public String findBalance(String userName) {
-        String sql = "SELECT balance FROM accounts JOIN users ON users.user_id = accounts.user_id WHERE username = ? ";
-        return jdbcTemplate.queryForObject(sql, String.class, userName);
+    public Account findBalance(String userName) {
+        String sql = "SELECT * FROM accounts JOIN users ON users.user_id = accounts.user_id WHERE username = ?;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userName);
+        Account account = null;
+        if (results.next()){
+            account = mapRowToAccount(results);
+        }
+        return account;
     }
+
+    private Account mapRowToAccount(SqlRowSet results){
+        Account account = new Account();
+        account.setAccountId(results.getInt("account_id"));
+        account.setUserid(results.getInt("accounts.user_id"));
+        account.setBalance(results.getBigDecimal("balance"));
+        return account;
+    }
+
 }

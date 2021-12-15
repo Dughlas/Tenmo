@@ -7,6 +7,7 @@ import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.view.ConsoleService;
+import io.cucumber.java.bs.A;
 
 public class App {
 
@@ -27,7 +28,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private AuthenticatedUser currentUser;
     private ConsoleService console;
     private AuthenticationService authenticationService;
-	private AccountService accountService;
+    //additional Variables:
+	private AccountService accountService = new AccountService(API_BASE_URL);
+
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
     	app.run();
@@ -70,8 +73,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewCurrentBalance() {
-
-	console.displayBalance(accountService.getBalanceByUserName());
+	Account balance = accountService.getBalanceByUserName(currentUser.getUser().getUsername());
+		System.out.println("Current balance: " + balance.getBalance());
+	//console.displayBalance(accountService.getBalanceByUserName());
 		// TODO Auto-generated method stub
 		
 	}
@@ -143,6 +147,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			UserCredentials credentials = collectUserCredentials();
 		    try {
 				currentUser = authenticationService.login(credentials);
+				accountService.setAuthToken(currentUser.getToken());
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
 				System.out.println("Please attempt to login again.");

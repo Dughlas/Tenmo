@@ -75,7 +75,9 @@ public class ConsoleService {
 		} while(result == null);
 		return result;
 	}
-	public void displayBalance(Account account){
-		out.println("Current Balance: " + account.getBalance());
-	}
+
+	//we created this method:
+//	public void displayBalance(Account account){
+//		out.println("Current Balance: " + account.getBalance());
+//	}
 }
