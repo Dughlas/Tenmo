@@ -26,19 +26,18 @@ public class TransferService {
 
 
     //might be a HttpMethod.post/put
-    public Transfer transferFrom(String token){
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
-        ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "transferto/" + token,
-                HttpMethod.GET, entity, Transfer.class);
-        Transfer transfer = response.getBody();
-        return transfer;
-    }
+//    public Transfer transferFrom(String token){
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setBearerAuth(token);
+//        HttpEntity<Void> entity = new HttpEntity<>(headers);
+//        ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "transferto/" + token,
+//                HttpMethod.GET, entity, Transfer.class);
+//        Transfer transfer = response.getBody();
+//        return transfer;
+//    }
 
     public TransferDTO sendTransfer(int fromId, int toId, BigDecimal amount){
-                //BACKEND URL
         TransferDTO transferDTO = new TransferDTO();
         transferDTO.setUserIdFrom(fromId);
         transferDTO.setUserIdTO(toId);
@@ -47,11 +46,11 @@ public class TransferService {
         return transfer;
     }
 
-    public HttpEntity<Void> makeAuthEntity(){
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
-        return new HttpEntity<>(headers);
-    }
+//    public HttpEntity<Void> makeAuthEntity(){
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setBearerAuth(authToken);
+//        return new HttpEntity<>(headers);
+//    }
     public HttpEntity<TransferDTO> makeTransferDTOAuthEntity(TransferDTO transferDTO){
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);

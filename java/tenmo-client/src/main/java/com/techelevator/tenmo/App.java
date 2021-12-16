@@ -34,6 +34,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private AccountService accountService = new AccountService(API_BASE_URL);
 	private Transfer transfer;
 	private TransferService transferService = new TransferService(API_BASE_URL);
+
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
     	app.run();
@@ -78,7 +79,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void viewCurrentBalance() {
 	Account balance = accountService.getBalanceByUserName(currentUser.getUser().getUsername());
 		System.out.println("Current balance: " + balance.getBalance());
-	//console.displayBalance(accountService.getBalanceByUserName());
 		// TODO Auto-generated method stub
 		
 	}
@@ -95,12 +95,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 
 	private void sendBucks() {
 		System.out.println("name: " + currentUser.getUser().getUsername() + " id: " + currentUser.getUser().getId());
-		//List<Pokemon> pokemonList = pokemonService.getAllPokemon(currentUser.getToken());
 		List<User> userList = accountService.getAllAccountsById(currentUser.getToken());
 		for (User user: userList){
 			System.out.println("name: " + "" +"account id: " + user.getId() + " username: " + user.getUsername());
 		}
-		// make sure valid id
+		/**
+		 *          ****************   make sure valid id    *******************
+		 */
 		int selectIdToTransfer = console.getUserInputInteger("Please select an ID to transfer money to, 0 to exit: ");
 		if(selectIdToTransfer > 0){
 			String strAmt = console.getUserInput("Enter amount to transfer: ");
@@ -108,11 +109,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			transferService.sendTransfer(currentUser.getUser().getId(), selectIdToTransfer, amountToTransfer);
 		}
 
-
-//		List<Transfer> transferList = transferService.transferFrom(currentUser.);
-//		for(Transfer transfer: transferlist)
-//		Transfer amount = transferService.transferFrom(currentUser.getUser().getId());
-//		amount.getAmount();
 
 		// TODO Auto-generated method stub
 		

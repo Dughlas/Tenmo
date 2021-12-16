@@ -46,9 +46,22 @@ public class JdbcTransfer implements TransferDao{
     @Override
     public TransferDTO transfer(TransferDTO transfer) {
         System.out.println("I'm in here! Ready to Transfer: ");
-        return null;
+        BigDecimal balance = transfer.getAmount();
+        int userIdTo = transfer.getUserIdTO();
+        int userFromId = transfer.getUserIdFrom();
+//UPDATE accounts SET balance = ? WHERE user_id = ?
+        //String sql = "UPDATE * from accounts where user_id = ?";
+        //SqlRowSet result = jdbcTemplate.queryForRowSet(sql, userIdTo);
+        String sql = "UPDATE accounts SET balance = ? + 150 WHERE accounts.user_id = ?";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, balance, userFromId);
+        TransferDTO transferDTO = null;
+        if(result.next()){
+            transferDTO = mapRowToTransfer(result);
+            System.out.println(transferDTO.getAmount());
+            System.out.println("account pulling from: " + transferDTO.getUserIdFrom());
+        }
+        return transferDTO;
     }
-
 
 
     private TransferDTO mapRowToTransfer(SqlRowSet results){
