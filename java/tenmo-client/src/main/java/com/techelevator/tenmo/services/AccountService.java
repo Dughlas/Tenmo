@@ -1,11 +1,17 @@
 package com.techelevator.tenmo.services;
 
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 //we created this
 public class AccountService {
     private String baseUrl;
@@ -13,23 +19,9 @@ public class AccountService {
     private String authToken;
 
 
-
     public AccountService(String url){
-        baseUrl = url;
+        this.baseUrl = url;
     }
-//    public Account getBalance(String token){
-//        System.out.println("getting to AccountService??");
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setBearerAuth(token);
-//        HttpEntity<Void> entity = new HttpEntity<>(headers);
-//        ResponseEntity<Account> response = restTemplate.exchange(baseUrl + "balance/" +,
-//                HttpMethod.GET, entity, Account.class);
-//        Account account = response.getBody();
-//        return account;
-//    }
-
-
-
     public void setAuthToken(String authToken){
         this.authToken = authToken;
     }
@@ -41,6 +33,18 @@ public class AccountService {
         balance = response.getBody();
         return balance;
     }
+
+    public List<User> getAllAccountsById(String token){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ResponseEntity<User[]> response = restTemplate.exchange(baseUrl + "/tenmo/user_id/", HttpMethod.GET,
+                entity, User[].class);
+        User[] accounts = response.getBody();
+        return new ArrayList<>(Arrays.asList(accounts));
+
+    }
+
     public HttpEntity<Void>makeAuthEntity(){
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);

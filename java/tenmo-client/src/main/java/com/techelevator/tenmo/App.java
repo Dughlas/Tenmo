@@ -2,12 +2,15 @@ package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
 import com.techelevator.view.ConsoleService;
 import io.cucumber.java.bs.A;
+
+import java.util.List;
 
 public class App {
 
@@ -91,6 +94,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
+		System.out.println("name: " + currentUser.getUser().getUsername() + " id: " + currentUser.getUser().getId());
+		//List<Pokemon> pokemonList = pokemonService.getAllPokemon(currentUser.getToken());
+		List<User> userList = accountService.getAllAccountsById(currentUser.getToken());
+		for (User user: userList){
+			System.out.println("name: " + "" +"account id: " + user.getId() + " user id: " + user.getUsername());
+		}
+
 		// TODO Auto-generated method stub
 		
 	}
@@ -147,7 +157,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			UserCredentials credentials = collectUserCredentials();
 		    try {
 				currentUser = authenticationService.login(credentials);
-				accountService.setAuthToken(currentUser.getToken());
+				accountService.setAuthToken(currentUser.getToken());         //add a setAuthToken for each class
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
 				System.out.println("Please attempt to login again.");

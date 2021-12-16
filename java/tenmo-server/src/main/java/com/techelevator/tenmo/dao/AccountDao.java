@@ -9,5 +9,5 @@ public interface AccountDao {
     Account findAccountById(int accountId);
     Account findUserById(int userId);
     Account findBalance(String userName);
-    List<Account> getAllAccountsById();
+
 }
