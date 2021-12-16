@@ -8,6 +8,7 @@ import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.view.ConsoleService;
 import io.cucumber.java.bs.A;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class App {
@@ -32,7 +33,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     //additional Variables:
 	private AccountService accountService = new AccountService(API_BASE_URL);
 	private Transfer transfer;
-	private TransferService transferService;
+	private TransferService transferService = new TransferService(API_BASE_URL);
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
     	app.run();
@@ -97,12 +98,21 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		//List<Pokemon> pokemonList = pokemonService.getAllPokemon(currentUser.getToken());
 		List<User> userList = accountService.getAllAccountsById(currentUser.getToken());
 		for (User user: userList){
-			System.out.println("name: " + "" +"account id: " + user.getId() + " user id: " + user.getUsername());
+			System.out.println("name: " + "" +"account id: " + user.getId() + " username: " + user.getUsername());
 		}
-		List<Transfer> transferList = transferService.transferFrom(currentUser.);
-		for(Transfer transfer: transferlist)
-		Transfer amount = transferService.transferFrom(currentUser.getUser().getId());
-		amount.getAmount();
+		// make sure valid id
+		int selectIdToTransfer = console.getUserInputInteger("Please select an ID to transfer money to, 0 to exit: ");
+		if(selectIdToTransfer > 0){
+			String strAmt = console.getUserInput("Enter amount to transfer: ");
+			BigDecimal amountToTransfer = new BigDecimal(strAmt);
+			transferService.sendTransfer(currentUser.getUser().getId(), selectIdToTransfer, amountToTransfer);
+		}
+
+
+//		List<Transfer> transferList = transferService.transferFrom(currentUser.);
+//		for(Transfer transfer: transferlist)
+//		Transfer amount = transferService.transferFrom(currentUser.getUser().getId());
+//		amount.getAmount();
 
 		// TODO Auto-generated method stub
 		
@@ -161,7 +171,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		    try {
 				currentUser = authenticationService.login(credentials);
 				accountService.setAuthToken(currentUser.getToken());         //add a setAuthToken for each class
-				//transferService.setAuthToken((currentUser.getToken()));
+				transferService.setAuthToken((currentUser.getToken()));
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
 				System.out.println("Please attempt to login again.");

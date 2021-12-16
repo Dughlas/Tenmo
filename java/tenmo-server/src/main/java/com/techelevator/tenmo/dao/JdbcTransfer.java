@@ -38,16 +38,19 @@ public class JdbcTransfer implements TransferDao{
         return transferDTO;
     }
 
+
+    //how to 1: take userId get back account number and have enough money to transfer
+    //2: subtract amount from the fromAccount
+    //3: add amount to the toAccount
+    //4: write something to the transfer table.
     @Override
-    public TransferDTO findAmount(BigDecimal amount) {
-        String sql = "SELECT * FROM accounts JOIN users ON users.user_id = accounts.user_id WHERE username = ?;";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, amount);
-        TransferDTO transferDTO = null;
-        if (results.next()){
-            transferDTO = mapRowToTransfer(results);
-        }
-        return transferDTO;
+    public TransferDTO transfer(TransferDTO transfer) {
+        System.out.println("I'm in here! Ready to Transfer: ");
+        return null;
     }
+
+
+
     private TransferDTO mapRowToTransfer(SqlRowSet results){
         TransferDTO transferDTO = new TransferDTO();
         transferDTO.setAmount(results.getBigDecimal("balance"));

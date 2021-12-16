@@ -19,14 +19,9 @@ public class TransferController {
         System.out.println(userIdTo);
         return transferDao.findReceiverByID(userIdTo);
     }
-    @PostMapping("transferbalance")
-    public TransferDTO transferAmount(BigDecimal amount){
-        System.out.println(amount);
-        return transferDao.findAmount(amount);
+    @PostMapping("transfer")
+    public TransferDTO transferAmount(@RequestBody TransferDTO transferDTO){
+        return transferDao.transfer(transferDTO);
     }
-    @RequestMapping(path = "/transferfrom/{userIdFrom}", method = RequestMethod.GET)
-    public TransferDTO transferFromUserId(@PathVariable int userIdFrom) {
-        System.out.println(userIdFrom);
-        return transferDao.findReceiverByID(userIdFrom);
-    }
+
 }

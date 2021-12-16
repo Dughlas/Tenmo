@@ -7,5 +7,5 @@ import java.math.BigDecimal;
 public interface TransferDao {
     TransferDTO findSenderByID(int userIdTo);
     TransferDTO findReceiverByID(int userIdFrom);
-    TransferDTO findAmount(BigDecimal amount);
+    TransferDTO transfer(TransferDTO transfer);
 }
