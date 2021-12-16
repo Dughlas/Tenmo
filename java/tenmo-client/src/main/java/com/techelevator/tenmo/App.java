@@ -1,12 +1,10 @@
 package com.techelevator.tenmo;
 
-import com.techelevator.tenmo.model.Account;
-import com.techelevator.tenmo.model.AuthenticatedUser;
-import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserCredentials;
+import com.techelevator.tenmo.model.*;
 import com.techelevator.tenmo.services.AccountService;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
+import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.view.ConsoleService;
 import io.cucumber.java.bs.A;
 
@@ -33,7 +31,8 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private AuthenticationService authenticationService;
     //additional Variables:
 	private AccountService accountService = new AccountService(API_BASE_URL);
-
+	private Transfer transfer;
+	private TransferService transferService;
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
     	app.run();
@@ -100,6 +99,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		for (User user: userList){
 			System.out.println("name: " + "" +"account id: " + user.getId() + " user id: " + user.getUsername());
 		}
+		List<Transfer> transferList = transferService.transferFrom(currentUser.);
+		for(Transfer transfer: transferlist)
+		Transfer amount = transferService.transferFrom(currentUser.getUser().getId());
+		amount.getAmount();
 
 		// TODO Auto-generated method stub
 		
@@ -158,6 +161,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 		    try {
 				currentUser = authenticationService.login(credentials);
 				accountService.setAuthToken(currentUser.getToken());         //add a setAuthToken for each class
+				//transferService.setAuthToken((currentUser.getToken()));
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
 				System.out.println("Please attempt to login again.");
