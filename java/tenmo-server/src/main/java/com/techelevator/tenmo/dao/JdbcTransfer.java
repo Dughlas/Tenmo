@@ -4,6 +4,7 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.TransferDTO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -46,21 +47,47 @@ public class JdbcTransfer implements TransferDao{
     @Override
     public TransferDTO transfer(TransferDTO transfer) {
         System.out.println("I'm in here! Ready to Transfer: ");
-        BigDecimal balance = transfer.getAmount();
-        int userIdTo = transfer.getUserIdTO();
-        int userFromId = transfer.getUserIdFrom();
-//UPDATE accounts SET balance = ? WHERE user_id = ?
-        //String sql = "UPDATE * from accounts where user_id = ?";
-        //SqlRowSet result = jdbcTemplate.queryForRowSet(sql, userIdTo);
-        String sql = "UPDATE accounts SET balance = ? + 150 WHERE accounts.user_id = ?";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, balance, userFromId);
-        TransferDTO transferDTO = null;
-        if(result.next()){
-            transferDTO = mapRowToTransfer(result);
-            System.out.println(transferDTO.getAmount());
-            System.out.println("account pulling from: " + transferDTO.getUserIdFrom());
+        BigDecimal newAccountBalance = new BigDecimal("0");
+        BigDecimal moneySent = transfer.getAmount();
+        Account account = new Account();
+        Account account1 = new Account();
+        BigDecimal newToAccountBalance = new BigDecimal("0");
+        if(transfer.getUserIdFrom() == transfer.getUserIdFrom()) {
+            String sql = "SELECT balance FROM accounts WHERE user_id = ?";
+
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql, transfer.getUserIdFrom());
+            if (result.next()) {
+                double newBalance = result.getDouble("balance");
+                BigDecimal bigDecimalBalance = new BigDecimal(newBalance);
+                account.setBalance(bigDecimalBalance);
+                System.out.println("initial balance: " + account.getBalance());
+            }
+            if(account.getBalance().compareTo(moneySent) >= 0){
+                newAccountBalance = account.getBalance().subtract(moneySent);
+                System.out.println("new balance: " + newAccountBalance);
+
+            }
+
         }
-        return transferDTO;
+        String sql1 = "SELECT balance FROM accounts WHERE user_id = ?";
+        SqlRowSet result1 = jdbcTemplate.queryForRowSet(sql1, transfer.getUserIdTO());
+        if(result1.next()) {
+            double newBalance = result1.getDouble("balance");
+            BigDecimal bigDecimalBalance = new BigDecimal(newBalance);
+            account1.setBalance(bigDecimalBalance);
+            System.out.println("balanace 2: " + account1.getBalance());
+        }
+        if(account.getBalance().compareTo(moneySent) >= 0){
+            newAccountBalance = account1.getBalance().add(moneySent);
+            System.out.println("new balance: " + newAccountBalance);
+            String sql3 = "UPDATE accounts SET balance = ? WHERE user_id = ?";
+            jdbcTemplate.update(sql3, newToAccountBalance, transfer.getUserIdFrom());
+        }
+
+        String sql2 = "UPDATE accounts SET balance = ? WHERE user_id = ?";
+        jdbcTemplate.update(sql2, newAccountBalance, transfer.getUserIdTO());
+
+        return null;
     }
 
 
