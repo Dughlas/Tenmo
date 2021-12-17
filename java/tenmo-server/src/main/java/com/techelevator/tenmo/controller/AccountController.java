@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @PreAuthorize("isAuthenticated()")
@@ -35,4 +36,8 @@ public class AccountController {
         return userDao.findAll();
     }
 
+    @GetMapping("/user_id/")
+    public List<User> findAllExceptCurrentUser(Principal principal){
+        return userDao.findAllExceptCurrentUser(principal.getName());
+    }
 }

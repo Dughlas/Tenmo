@@ -44,7 +44,17 @@ public class JdbcUserDao implements UserDao {
         }
         return users;
     }
-
+    @Override
+    public List<User> findAllExceptCurrentUser(String username) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT user_id, username, password_hash FROM users WHERE NOT username = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, username);
+        while (results.next()) {
+            User user = mapRowToUser(results);
+            users.add(user);
+        }
+        return users;
+    }
 
     @Override
     public User findByUsername(String username) throws UsernameNotFoundException {

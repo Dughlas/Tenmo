@@ -94,8 +94,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-		System.out.println("name: " + currentUser.getUser().getUsername() + " id: " + currentUser.getUser().getId());
-		List<User> userList = accountService.getAllAccountsById(currentUser.getToken());
+		List<User> userList = accountService.getAllAccountsByIdExceptCurrentUser(currentUser.getToken());
 		for (User user: userList){
 			System.out.println("name: " + "" +"account id: " + user.getId() + " username: " + user.getUsername());
 		}

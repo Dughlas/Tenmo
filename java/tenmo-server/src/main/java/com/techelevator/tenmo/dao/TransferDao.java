@@ -8,4 +8,5 @@ public interface TransferDao {
     TransferDTO findSenderByID(int userIdTo);
     TransferDTO findReceiverByID(int userIdFrom);
     TransferDTO transfer(TransferDTO transfer);
+
 }

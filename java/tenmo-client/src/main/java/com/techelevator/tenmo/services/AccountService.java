@@ -45,19 +45,15 @@ public class AccountService {
         User[] accounts = response.getBody();
         return new ArrayList<>(Arrays.asList(accounts));
     }
-
-
-//    public Account getSingleAccountById(int id) {
-//        Account account = null;
-//
-//        try{
-//            ResponseEntity<Account> result = restTemplate.exchange(baseUrl + "transferfrom/" + id, HttpMethod.GET, makeAuthEntity(), Account.class);
-//        account = result.getBody();
-//        }catch(RestClientResponseException | ResourceAccessException e){
-//            System.out.println(e.getMessage() + "IS this catching something.");
-//        }
-//        return account;
-//    }
+    public List<User> getAllAccountsByIdExceptCurrentUser(String token){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ResponseEntity<User[]> response = restTemplate.exchange(baseUrl + "user_id/", HttpMethod.GET,
+                entity, User[].class);
+        User[] accounts = response.getBody();
+        return new ArrayList<>(Arrays.asList(accounts));
+    }
 
     public HttpEntity<Void>makeAuthEntity(){
         HttpHeaders headers = new HttpHeaders();

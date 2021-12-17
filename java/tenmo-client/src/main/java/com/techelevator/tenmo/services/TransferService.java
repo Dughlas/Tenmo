@@ -46,11 +46,7 @@ public class TransferService {
         return transfer;
     }
 
-//    public HttpEntity<Void> makeAuthEntity(){
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setBearerAuth(authToken);
-//        return new HttpEntity<>(headers);
-//    }
+
     public HttpEntity<TransferDTO> makeTransferDTOAuthEntity(TransferDTO transferDTO){
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);
