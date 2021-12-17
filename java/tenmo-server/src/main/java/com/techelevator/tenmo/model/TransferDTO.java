@@ -6,6 +6,9 @@ public class TransferDTO {
     private int userIdTO;
     private int userIdFrom;
     private BigDecimal amount;
+    private String ResponseStatusDesc;
+    private int transferStatusId;
+
 
     public int getUserIdTO() {
         return userIdTO;
@@ -29,5 +32,21 @@ public class TransferDTO {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public String getResponseStatusDesc() {
+        return ResponseStatusDesc;
+    }
+
+    public void setResponseStatusDesc(String responseStatusDesc) {
+        ResponseStatusDesc = responseStatusDesc;
+    }
+
+    public int getTransferStatusId() {
+        return transferStatusId;
+    }
+
+    public void setTransferStatusId(int transferStatusId) {
+        this.transferStatusId = transferStatusId;
     }
 }

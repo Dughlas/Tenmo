@@ -107,6 +107,7 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			BigDecimal amountToTransfer = new BigDecimal(strAmt);
 			transferService.sendTransfer(currentUser.getUser().getId(), selectIdToTransfer, amountToTransfer);
 		}
+		System.out.println("Send an status: " + transferService.getStatusResponse(currentUser.getToken()));
 
 
 		// TODO Auto-generated method stub

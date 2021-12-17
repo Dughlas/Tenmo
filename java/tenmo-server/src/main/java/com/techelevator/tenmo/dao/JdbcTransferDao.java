@@ -81,25 +81,39 @@ public class JdbcTransferDao implements TransferDao{
             String sql4 = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_to, account_from, amount) " +
                     "VALUES (2, 2, (SELECT account_id FROM accounts WHERE user_id = ?), (SELECT account_id FROM accounts WHERE user_id = ?), ?) ";
             jdbcTemplate.update(sql4, transfer.getUserIdTO(), transfer.getUserIdFrom(), moneySent);
-
-            String sql5 = "SELECT transfer_status_desc FROM transfer_statuses " +
-                    "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
-                    "WHERE account_from = ?";
-
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transfer.getUserIdFrom());
-            TransferDTO transferDTO = null;
-            if (result.next()) {
-                transferDTO = mapRowToTransfer(results);
-
             }
-        }
+
         return null;
     }
+
+    @Override
+    public TransferDTO ResponseStatus(TransferDTO transferDTO) {
+        String sql5 = "SELECT transfer_status_desc FROM transfer_statuses " +
+                "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
+                "WHERE account_from = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferDTO.getUserIdFrom());
+        System.out.println("are we in here?");
+        TransferDTO transferStatus = null;
+        if (results.next()) {
+            transferStatus = mapRowToTransfer(results);
+        }
+        System.out.println("response status: " + transferStatus);
+        return transferStatus;
+    }
+
+    @Override //currently does nothing!
+    public TransferDTO transferStatus(String transferStatus) {
+        return null;
+    }
+
+
     private TransferDTO mapRowToTransfer(SqlRowSet results){
         TransferDTO transferDTO = new TransferDTO();
         transferDTO.setAmount(results.getBigDecimal("balance"));
         transferDTO.setUserIdTO(results.getInt("user_id"));
         transferDTO.setUserIdFrom(results.getInt("user_id"));
+        transferDTO.setTransferStatusId(results.getInt("transfer_status_id"));
+        transferDTO.setResponseStatusDesc(results.getString("transfer_status_desc"));
         return transferDTO;
     }
 }

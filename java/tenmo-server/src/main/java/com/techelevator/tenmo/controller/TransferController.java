@@ -23,5 +23,9 @@ public class TransferController {
     public TransferDTO transferAmount(@RequestBody TransferDTO transferDTO){
         return transferDao.transfer(transferDTO);
     }
-
+    @GetMapping("transfer")
+    public String transferStatus(TransferDTO transferDTO){
+       //return as a string right now;
+                return transferDTO.getResponseStatusDesc();
+    }
 }
