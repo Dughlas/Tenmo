@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferDTO;
 import com.techelevator.tenmo.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,7 +28,7 @@ public class JdbcTransferDao implements TransferDao{
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, userIdTo);
         TransferDTO transferDTO = null;
         if(result.next()){
-            transferDTO = mapRowToTransfer(result);
+            transferDTO = mapRowToTransferDto(result);
         }
         return transferDTO;
     }
@@ -38,7 +39,7 @@ public class JdbcTransferDao implements TransferDao{
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, userIdFrom);
         TransferDTO transferDTO = null;
         if(result.next()){
-            transferDTO = mapRowToTransfer(result);
+            transferDTO = mapRowToTransferDto(result);
         }
         return transferDTO;
     }
@@ -87,17 +88,18 @@ public class JdbcTransferDao implements TransferDao{
             jdbcTemplate.update(sql4, transfer.getUserIdTO(), transfer.getUserIdFrom(), moneySent);
             }
 
+
         return null;
     }
 
     @Override
-    public TransferDTO ResponseStatusId(TransferDTO transferDTO) {
+    public Transfer ResponseStatusId(Transfer transfer) {
         String sql5 = "SELECT transfer_status_desc FROM transfer_statuses " +
                 "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
                 "WHERE account_from = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferDTO.getUserIdFrom());
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transfer.getAccountFrom());
         System.out.println("are we in Jdbc ResponseStatus?");
-        TransferDTO transferStatus = null;
+        Transfer transferStatus = null;
         if (results.next()) {
             transferStatus = mapRowToTransfer(results);
         }
@@ -105,60 +107,53 @@ public class JdbcTransferDao implements TransferDao{
         return transferStatus;
     }
 
-    //copied from resposneStatusId
-    @Override
-    public TransferDTO transferStatusDesc(TransferDTO transferStatus) {
-        String sql5 = "SELECT transfer_status_desc FROM transfer_statuses " +
-                "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
-                "WHERE account_from = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferStatus.getUserIdFrom());
-        System.out.println("are we in Jdbc ResponseStatus?");
-        TransferDTO status = null;
-        if (results.next()) {
-            status = mapRowToTransferStatus(results);
-        }
-        System.out.println("response status: " + transferStatus);
-        return status;
-    }
+
 
     @Override
-    public List<TransferDTO> findAllTransfers() {
-        List<TransferDTO> transferStatus = new ArrayList<>();
-        //transfer_status_id
-        //WHERE account_from = ?;
+    public Transfer transferStatusDesc(Transfer transferStatus) {
+        String sql5 = "SELECT  transfer_status_desc FROM transfer_statuses " +
+                "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
+                "WHERE account_from = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferStatus.getAccountFrom());
+        Transfer status = null;
+        while (results.next()) {
+            status = mapRowToTransfer(results);
+        }
+        System.out.println("response status: " + status);
+        return null;
+    }
+
+
+
+    @Override
+    public List<Transfer> findAllTransfers() {
+        List<Transfer> transferStatus = new ArrayList<>();
         String sql = "SELECT * FROM transfers ";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while(results.next()) {
-            TransferDTO transferDTO = mapRowToTransferStatus(results);
-            transferStatus.add(transferDTO);
+            Transfer transfer = mapRowToTransfer(results);
+            transferStatus.add(transfer);
         }
         return transferStatus;
     }
-    // @Override
-    //    public List<User> findAll() {
-    //        List<User> users = new ArrayList<>();
-    //        String sql = "SELECT user_id, username, password_hash FROM users;";
-    //        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
-    //        while(results.next()) {
-    //            User user = mapRowToUser(results);
-    //            users.add(user);
-    //        }
-    //        return users;
-    //    }
 
 
-    private TransferDTO mapRowToTransfer(SqlRowSet results){
+    private TransferDTO mapRowToTransferDto(SqlRowSet results){
         TransferDTO transferDTO = new TransferDTO();
         transferDTO.setAmount(results.getBigDecimal("balance"));
         transferDTO.setUserIdTO(results.getInt("user_id"));
         transferDTO.setUserIdFrom(results.getInt("user_id"));
+        return transferDTO;
+    }
+    private Transfer mapRowToTransfer(SqlRowSet results){
+        Transfer transfer = new Transfer();
+        transfer.setAmount(results.getBigDecimal("amount"));
+        transfer.setAccountTo(results.getInt("account_to"));
+        transfer.setAccountFrom(results.getInt("account_from"));
+        transfer.setTransferStatus(results.getInt("transfer_status_id"));
+        transfer.setTransferType(results.getInt("transfer_status_desc"));
+        transfer.setTransferId(results.getInt("transfer_id"));
+        return transfer;
+    }
 
-        return transferDTO;
-    }
-    private TransferDTO mapRowToTransferStatus(SqlRowSet rs){
-        TransferDTO transferDTO = new TransferDTO();
-        transferDTO.setTransferStatusId(rs.getInt("transfer_status_id"));
-        transferDTO.setResponseStatusDesc(rs.getString("transfer_status_desc"));
-        return transferDTO;
-    }
 }

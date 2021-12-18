@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.TransferDao;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferDTO;
 import com.techelevator.tenmo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,11 @@ public class TransferController {
         return transferDao.transfer(transferDTO);
     }
     @GetMapping("transfer")
-    public TransferDTO transferStatus(TransferDTO transferDTO){
-                return transferDao.transferStatusDesc(transferDTO);
+    public Transfer transferStatus(Transfer transfer){
+                return transferDao.transferStatusDesc(transfer);
     }
     @GetMapping("transfer/all")
-    public List<TransferDTO> findAllTransfers(){
+    public List<Transfer> findAllTransfers(){
         return  transferDao.findAllTransfers();
     }
 }

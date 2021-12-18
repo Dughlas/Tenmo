@@ -6,8 +6,7 @@ public class TransferDTO {
     private int userIdTO;
     private int userIdFrom;
     private BigDecimal amount;
-    private String ResponseStatusDesc;//transfer_statuses	transfer_status_desc	12	varchar
-    private int transferStatusId; //transfer_statuses	transfer_status_id	4	serial
+
 
 
 
@@ -35,19 +34,5 @@ public class TransferDTO {
         this.amount = amount;
     }
 
-    public String getResponseStatusDesc() {
-        return ResponseStatusDesc;
-    }
 
-    public void setResponseStatusDesc(String responseStatusDesc) {
-        ResponseStatusDesc = responseStatusDesc;
-    }
-
-    public int getTransferStatusId() {
-        return transferStatusId;
-    }
-
-    public void setTransferStatusId(int transferStatusId) {
-        this.transferStatusId = transferStatusId;
-    }
 }
