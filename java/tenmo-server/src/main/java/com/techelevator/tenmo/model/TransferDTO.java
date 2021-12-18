@@ -6,8 +6,9 @@ public class TransferDTO {
     private int userIdTO;
     private int userIdFrom;
     private BigDecimal amount;
-    private String ResponseStatusDesc;
-    private int transferStatusId;
+    private String ResponseStatusDesc;//transfer_statuses	transfer_status_desc	12	varchar
+    private int transferStatusId; //transfer_statuses	transfer_status_id	4	serial
+
 
 
     public int getUserIdTO() {

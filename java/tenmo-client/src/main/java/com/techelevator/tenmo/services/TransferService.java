@@ -59,16 +59,25 @@ public class TransferService {
     //        User[] accounts = response.getBody();
     //        return new ArrayList<>(Arrays.asList(accounts));
     //    }
-    public String getStatusResponse(String token){
+    public Transfer getStatusResponse(String token){
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<Void> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(baseUrl + "transfer", HttpMethod.GET,
-                entity, String.class);
-        String accounts = response.getBody();
+        ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "transfer", HttpMethod.GET,
+                entity, Transfer.class);
+        Transfer accounts = response.getBody();
         return accounts;
     }
-
+    //hopefully calling all transferId's
+    public List<Transfer> getAllTransferIds(String token){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ResponseEntity<Transfer[]> response = restTemplate.exchange(baseUrl + "transfer/all", HttpMethod.GET,
+                entity, Transfer[].class);
+        Transfer[] transferIds = response.getBody();
+        return new ArrayList<>(Arrays.asList(transferIds));
+    }
 
     public HttpEntity<TransferDTO> makeTransferDTOAuthEntity(TransferDTO transferDTO){
         HttpHeaders headers = new HttpHeaders();
@@ -76,5 +85,6 @@ public class TransferService {
         HttpEntity<TransferDTO> entity = new HttpEntity<>(transferDTO, headers);
         return entity;
     }
+
 
 }

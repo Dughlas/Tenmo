@@ -2,11 +2,14 @@ package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.model.TransferDTO;
+import com.techelevator.tenmo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.security.Principal;
+import java.util.List;
 
 @PreAuthorize("isAuthenticated()")
 @RestController
@@ -24,8 +27,11 @@ public class TransferController {
         return transferDao.transfer(transferDTO);
     }
     @GetMapping("transfer")
-    public String transferStatus(TransferDTO transferDTO){
-       //return as a string right now;
-                return transferDTO.getResponseStatusDesc();
+    public TransferDTO transferStatus(TransferDTO transferDTO){
+                return transferDao.transferStatusDesc(transferDTO);
+    }
+    @GetMapping("transfer/all")
+    public List<TransferDTO> findAllTransfers(){
+        return  transferDao.findAllTransfers();
     }
 }

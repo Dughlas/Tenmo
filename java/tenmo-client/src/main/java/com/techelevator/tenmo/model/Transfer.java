@@ -7,6 +7,8 @@ public class Transfer {
     private int UserIdFrom;
     private BigDecimal amount;
     private Account account;
+    private TransferDTO responseStatus;
+
     public int getUserIdTo() {
         return userIdTo;
     }
@@ -36,4 +38,13 @@ public class Transfer {
     }
 
 
+
+    //new
+    public TransferDTO getResponseStatus() {
+        return responseStatus;
+    }
+
+    public void setResponseStatus(TransferDTO responseStatus) {
+        this.responseStatus = responseStatus;
+    }
 }

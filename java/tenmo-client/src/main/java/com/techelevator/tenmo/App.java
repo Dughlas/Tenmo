@@ -84,6 +84,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewTransferHistory() {
+		List<Transfer> transferList = transferService.getAllTransferIds(currentUser.getToken());
+		for (Transfer transfer: transferList){
+			System.out.println("response ID: " + transfer.getResponseStatus());
+		}
 		// TODO Auto-generated method stub
 		
 	}
@@ -108,9 +112,6 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			transferService.sendTransfer(currentUser.getUser().getId(), selectIdToTransfer, amountToTransfer);
 		}
 		System.out.println("Send an status: " + transferService.getStatusResponse(currentUser.getToken()));
-
-
-		// TODO Auto-generated method stub
 		
 	}
 

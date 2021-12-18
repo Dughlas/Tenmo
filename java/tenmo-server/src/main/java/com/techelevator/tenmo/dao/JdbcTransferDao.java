@@ -2,12 +2,16 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.TransferDTO;
+import com.techelevator.tenmo.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JdbcTransferDao implements TransferDao{
@@ -87,12 +91,12 @@ public class JdbcTransferDao implements TransferDao{
     }
 
     @Override
-    public TransferDTO ResponseStatus(TransferDTO transferDTO) {
+    public TransferDTO ResponseStatusId(TransferDTO transferDTO) {
         String sql5 = "SELECT transfer_status_desc FROM transfer_statuses " +
                 "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
                 "WHERE account_from = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferDTO.getUserIdFrom());
-        System.out.println("are we in here?");
+        System.out.println("are we in Jdbc ResponseStatus?");
         TransferDTO transferStatus = null;
         if (results.next()) {
             transferStatus = mapRowToTransfer(results);
@@ -101,10 +105,46 @@ public class JdbcTransferDao implements TransferDao{
         return transferStatus;
     }
 
-    @Override //currently does nothing!
-    public TransferDTO transferStatus(String transferStatus) {
-        return null;
+    //copied from resposneStatusId
+    @Override
+    public TransferDTO transferStatusDesc(TransferDTO transferStatus) {
+        String sql5 = "SELECT transfer_status_desc FROM transfer_statuses " +
+                "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
+                "WHERE account_from = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferStatus.getUserIdFrom());
+        System.out.println("are we in Jdbc ResponseStatus?");
+        TransferDTO status = null;
+        if (results.next()) {
+            status = mapRowToTransferStatus(results);
+        }
+        System.out.println("response status: " + transferStatus);
+        return status;
     }
+
+    @Override
+    public List<TransferDTO> findAllTransfers() {
+        List<TransferDTO> transferStatus = new ArrayList<>();
+        //transfer_status_id
+        //WHERE account_from = ?;
+        String sql = "SELECT * FROM transfers ";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while(results.next()) {
+            TransferDTO transferDTO = mapRowToTransferStatus(results);
+            transferStatus.add(transferDTO);
+        }
+        return transferStatus;
+    }
+    // @Override
+    //    public List<User> findAll() {
+    //        List<User> users = new ArrayList<>();
+    //        String sql = "SELECT user_id, username, password_hash FROM users;";
+    //        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+    //        while(results.next()) {
+    //            User user = mapRowToUser(results);
+    //            users.add(user);
+    //        }
+    //        return users;
+    //    }
 
 
     private TransferDTO mapRowToTransfer(SqlRowSet results){
@@ -112,8 +152,13 @@ public class JdbcTransferDao implements TransferDao{
         transferDTO.setAmount(results.getBigDecimal("balance"));
         transferDTO.setUserIdTO(results.getInt("user_id"));
         transferDTO.setUserIdFrom(results.getInt("user_id"));
-        transferDTO.setTransferStatusId(results.getInt("transfer_status_id"));
-        transferDTO.setResponseStatusDesc(results.getString("transfer_status_desc"));
+
+        return transferDTO;
+    }
+    private TransferDTO mapRowToTransferStatus(SqlRowSet rs){
+        TransferDTO transferDTO = new TransferDTO();
+        transferDTO.setTransferStatusId(rs.getInt("transfer_status_id"));
+        transferDTO.setResponseStatusDesc(rs.getString("transfer_status_desc"));
         return transferDTO;
     }
 }
