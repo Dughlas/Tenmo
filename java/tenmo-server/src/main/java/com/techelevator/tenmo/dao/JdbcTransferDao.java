@@ -98,6 +98,7 @@ public class JdbcTransferDao implements TransferDao{
                 "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
                 "WHERE account_from = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transfer.getAccountFrom());
+        System.out.println(transfer.getAccountFrom());
         System.out.println("are we in Jdbc ResponseStatus?");
         Transfer transferStatus = null;
         if (results.next()) {
@@ -110,17 +111,19 @@ public class JdbcTransferDao implements TransferDao{
 
 
     @Override
-    public Transfer transferStatusDesc(Transfer transferStatus) {
-        String sql5 = "SELECT  transfer_status_desc FROM transfer_statuses " +
+    public Transfer transferStatusDesc(TransferDTO transferStatus) {
+        //List<Transfer> transfers = new ArrayList<>();
+        String sql5 = "SELECT  * FROM transfer_statuses " +
                 "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
                 "WHERE account_from = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferStatus.getAccountFrom());
-        Transfer status = null;
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferStatus.getUserIdFrom());
+        Transfer transfer = null;
         while (results.next()) {
-            status = mapRowToTransfer(results);
+            transfer = mapRowToTransfer(results);
+           // transfers.add(transfer);
         }
-        System.out.println("response status: " + status);
-        return null;
+        System.out.println(transfer.getAccountFrom());
+        return transfer;
     }
 
 
@@ -151,7 +154,7 @@ public class JdbcTransferDao implements TransferDao{
         transfer.setAccountTo(results.getInt("account_to"));
         transfer.setAccountFrom(results.getInt("account_from"));
         transfer.setTransferStatus(results.getInt("transfer_status_id"));
-        transfer.setTransferType(results.getInt("transfer_status_desc"));
+        transfer.setTransferType(results.getInt("transfer_type_id"));
         transfer.setTransferId(results.getInt("transfer_id"));
         return transfer;
     }

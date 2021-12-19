@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 
+//@RequestMapping("transfer")
 @PreAuthorize("isAuthenticated()")
 @RestController
 public class TransferController {
@@ -23,12 +24,12 @@ public class TransferController {
         System.out.println(userIdTo);
         return transferDao.findReceiverByID(userIdTo);
     }
-    @PostMapping("transfer")
+    @PostMapping("/transfer")
     public TransferDTO transferAmount(@RequestBody TransferDTO transferDTO){
         return transferDao.transfer(transferDTO);
     }
-    @GetMapping("transfer")
-    public Transfer transferStatus(Transfer transfer){
+    @GetMapping("/transfer")
+    public Transfer transferStatus(@RequestParam TransferDTO transfer){
                 return transferDao.transferStatusDesc(transfer);
     }
     @GetMapping("transfer/all")
@@ -36,3 +37,4 @@ public class TransferController {
         return  transferDao.findAllTransfers();
     }
 }
+//

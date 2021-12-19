@@ -59,7 +59,8 @@ public class TransferService {
     //        User[] accounts = response.getBody();
     //        return new ArrayList<>(Arrays.asList(accounts));
     //    }
-    public Transfer getStatusResponse(String token){
+
+    public Transfer getStatusResponse(String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<Void> entity = new HttpEntity<>(headers);

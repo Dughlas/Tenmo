@@ -11,6 +11,6 @@ public interface TransferDao {
     TransferDTO findReceiverByID(int userIdFrom);
     TransferDTO transfer(TransferDTO transfer);
     Transfer ResponseStatusId(Transfer transferId);
-    Transfer transferStatusDesc(Transfer transferStatus);
+    Transfer transferStatusDesc(TransferDTO transferStatus);
     List<Transfer> findAllTransfers();
 }
