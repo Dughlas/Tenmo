@@ -1,9 +1,6 @@
 package com.techelevator.tenmo.dao;
 
-import com.techelevator.tenmo.model.Account;
-import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.TransferDTO;
-import com.techelevator.tenmo.model.User;
+import com.techelevator.tenmo.model.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
@@ -109,25 +106,6 @@ public class JdbcTransferDao implements TransferDao{
     }
 
 
-
-    @Override
-    public Transfer transferStatusDesc(TransferDTO transferStatus) {
-        //List<Transfer> transfers = new ArrayList<>();
-        String sql5 = "SELECT  * FROM transfer_statuses " +
-                "JOIN transfers ON transfers.transfer_status_id = transfer_statuses.transfer_status_id " +
-                "WHERE account_from = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql5, transferStatus.getUserIdFrom());
-        Transfer transfer = null;
-        while (results.next()) {
-            transfer = mapRowToTransfer(results);
-           // transfers.add(transfer);
-        }
-        System.out.println(transfer.getAccountFrom());
-        return transfer;
-    }
-
-
-
     @Override
     public List<Transfer> findAllTransfers() {
         List<Transfer> transferStatus = new ArrayList<>();
@@ -139,6 +117,8 @@ public class JdbcTransferDao implements TransferDao{
         }
         return transferStatus;
     }
+
+
 
 
     private TransferDTO mapRowToTransferDto(SqlRowSet results){
@@ -158,5 +138,7 @@ public class JdbcTransferDao implements TransferDao{
         transfer.setTransferId(results.getInt("transfer_id"));
         return transfer;
     }
+
+
 
 }
