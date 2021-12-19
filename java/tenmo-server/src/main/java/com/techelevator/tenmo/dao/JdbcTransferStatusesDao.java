@@ -30,7 +30,7 @@ public class JdbcTransferStatusesDao implements TransferStatusesDao{
 
         }
 
-        System.out.println(transferStatuses.getTransferStatusDesc());
+        System.out.println("jdbcTransferStatusesDao says: " + transferStatuses.getTransferStatusDesc());
         return transferStatuses;
     }
 

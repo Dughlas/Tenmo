@@ -101,7 +101,7 @@ public class JdbcTransferDao implements TransferDao{
         if (results.next()) {
             transferStatus = mapRowToTransfer(results);
         }
-        System.out.println("response status: " + transferStatus);
+        System.out.println("Is it this response status: " + transferStatus);
         return transferStatus;
     }
 
@@ -111,10 +111,12 @@ public class JdbcTransferDao implements TransferDao{
         List<Transfer> transferStatus = new ArrayList<>();
         String sql = "SELECT * FROM transfers ";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        Transfer transfer = null;
         while(results.next()) {
-            Transfer transfer = mapRowToTransfer(results);
+            transfer = mapRowToTransfer(results);
             transferStatus.add(transfer);
         }
+        System.out.println("jdbcTransferDao findAllTransfers - line 119ish: " + transfer.getTransferStatus());
         return transferStatus;
     }
 
