@@ -86,16 +86,21 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void viewTransferHistory() {
 		List<Transfer> transferList = transferService.getAllTransferIds(currentUser.getToken());
 		for (Transfer transfer: transferList){
-			System.out.println("response ID: " + transfer.getResponseStatus());
+			System.out.println("ID: " + transfer.getTransferId() + " " + "From: " + transfer.getAccountFrom() + " " + "Amount: " + transfer.getAmount());
+			System.out.println();
+			System.out.println("ID: " + transfer.getTransferId() + " " + "TO: " + transfer.getAccountTo() + " " + "Amount: " + transfer.getAmount());
 		}
 		// TODO Auto-generated method stub
 		
 	}
 
+
 	private void viewPendingRequests() {
+
+	}
 		// TODO Auto-generated method stub
 		
-	}
+
 
 	private void sendBucks() {
 		List<User> userList = accountService.getAllAccountsByIdExceptCurrentUser(currentUser.getToken());
@@ -111,11 +116,12 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 			BigDecimal amountToTransfer = new BigDecimal(strAmt);
 			transferService.sendTransfer(currentUser.getUser().getId(), selectIdToTransfer, amountToTransfer);
 		}
-		System.out.println("Send an status: " + transferService.getStatusResponse(currentUser.getToken()).getUserIdFrom());
+		System.out.println("Send an status: " + transferService.getStatusResponse(currentUser.getToken()).getAccountFrom());
 		
 	}
 
 	private void requestBucks() {
+
 		// TODO Auto-generated method stub
 		
 	}

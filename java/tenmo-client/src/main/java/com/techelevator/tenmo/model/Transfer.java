@@ -3,48 +3,58 @@ package com.techelevator.tenmo.model;
 import java.math.BigDecimal;
 
 public class Transfer {
-    private int userIdTo;
-    private int UserIdFrom;
+    private int transferId;
+    private int transferType;
+    private int transferStatus;
+    private int accountFrom;
+    private int accountTo;
     private BigDecimal amount;
-    private Account account;
-    private TransferDTO responseStatus;
 
-    public int getUserIdTo() {
-        return userIdTo;
+    public int getTransferId() {
+        return transferId;
     }
 
-    public void setUserIdTo(int userIdTo) {
-        this.userIdTo = userIdTo;
+    public void setTransferId(int transferId) {
+        this.transferId = transferId;
     }
 
-    public int getUserIdFrom() {
-        return UserIdFrom;
+    public int getTransferType() {
+        return transferType;
     }
 
-    public void setGetUserIdFrom(int getUserIdFrom) {
-        this.UserIdFrom = getUserIdFrom;
+    public void setTransferType(int transferType) {
+        this.transferType = transferType;
+    }
+
+    public int getTransferStatus() {
+        return transferStatus;
+    }
+
+    public void setTransferStatus(int transferStatus) {
+        this.transferStatus = transferStatus;
+    }
+
+    public int getAccountFrom() {
+        return accountFrom;
+    }
+
+    public void setAccountFrom(int accountFrom) {
+        this.accountFrom = accountFrom;
+    }
+
+    public int getAccountTo() {
+        return accountTo;
+    }
+
+    public void setAccountTo(int accountTo) {
+        this.accountTo = accountTo;
     }
 
     public BigDecimal getAmount() {
-        if(account != null)
-        account.getBalance();
-        System.out.println(account.getBalance());
-
         return amount;
     }
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-
-
-    //new
-    public TransferDTO getResponseStatus() {
-        return responseStatus;
-    }
-
-    public void setResponseStatus(TransferDTO responseStatus) {
-        this.responseStatus = responseStatus;
     }
 }

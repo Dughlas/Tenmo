@@ -29,18 +29,6 @@ public class TransferService {
     }
 
 
-    //might be a HttpMethod.post/put
-//    public Transfer transferFrom(String token){
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setBearerAuth(token);
-//        HttpEntity<Void> entity = new HttpEntity<>(headers);
-//        ResponseEntity<Transfer> response = restTemplate.exchange(baseUrl + "transferto/" + token,
-//                HttpMethod.GET, entity, Transfer.class);
-//        Transfer transfer = response.getBody();
-//        return transfer;
-//    }
-    //
 
     public TransferDTO sendTransfer(int fromId, int toId, BigDecimal amount){
         TransferDTO transferDTO = new TransferDTO();
@@ -50,15 +38,7 @@ public class TransferService {
         TransferDTO transfer = restTemplate.postForObject(baseUrl + "transfer", makeTransferDTOAuthEntity(transferDTO), TransferDTO.class);
         return transfer;
     }
-    // public List<User> getAllAccountsById(String token){
-    //        HttpHeaders headers = new HttpHeaders();
-    //        headers.setBearerAuth(token);
-    //        HttpEntity<Void> entity = new HttpEntity<>(headers);
-    //        ResponseEntity<User[]> response = restTemplate.exchange(baseUrl + "tenmo/user_id/", HttpMethod.GET,
-    //                entity, User[].class);
-    //        User[] accounts = response.getBody();
-    //        return new ArrayList<>(Arrays.asList(accounts));
-    //    }
+
 
     public Transfer getStatusResponse(String token) {
         HttpHeaders headers = new HttpHeaders();
